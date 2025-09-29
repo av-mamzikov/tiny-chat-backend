@@ -8,6 +8,8 @@ public class WebSocketConnectionManager : IDisposable
 {
     private readonly ConcurrentDictionary<Guid, WebSocket> _clients = new();
     private readonly CancellationTokenSource _shutdownTokenSource = new();
+    private readonly ConcurrentQueue<string> _recentMessages = new();
+    private const int MaxRecentMessages = 50;
 
     public async Task HandleClientAsync(WebSocket webSocket, CancellationToken cancellationToken = default)
     {
@@ -18,6 +20,9 @@ public class WebSocketConnectionManager : IDisposable
         using var combinedTokenSource = CancellationTokenSource.CreateLinkedTokenSource(
             cancellationToken, _shutdownTokenSource.Token);
         var combinedToken = combinedTokenSource.Token;
+
+        // Send recent chat history to the newly connected client
+        await SendBacklogAsync(webSocket, combinedToken);
 
         var buffer = new byte[1024 * 4];
         try
@@ -59,6 +64,10 @@ public class WebSocketConnectionManager : IDisposable
 
     private async Task BroadcastMessageAsync(string message, Guid senderId, CancellationToken cancellationToken = default)
     {
+        // Store message in bounded recent history
+        _recentMessages.Enqueue(message);
+        while (_recentMessages.Count > MaxRecentMessages && _recentMessages.TryDequeue(out _)) { }
+
         var messageBytes = Encoding.UTF8.GetBytes(message);
         var tasks = _clients.Where(c => c.Value.State == WebSocketState.Open)
             .Select(async c =>
@@ -81,6 +90,26 @@ public class WebSocketConnectionManager : IDisposable
                 }
             });
         await Task.WhenAll(tasks);
+    }
+
+    private async Task SendBacklogAsync(WebSocket socket, CancellationToken cancellationToken)
+    {
+        // snapshot the queue to avoid sending partial while iterating
+        foreach (var msg in _recentMessages.ToArray())
+        {
+            if (socket.State != WebSocketState.Open || cancellationToken.IsCancellationRequested)
+            {
+                break;
+            }
+
+            await SendTextAsync(socket, msg, cancellationToken);
+        }
+    }
+
+    private static Task SendTextAsync(WebSocket socket, string message, CancellationToken cancellationToken)
+    {
+        var bytes = Encoding.UTF8.GetBytes(message);
+        return socket.SendAsync(new ArraySegment<byte>(bytes), WebSocketMessageType.Text, true, cancellationToken);
     }
 
     public void Dispose()
