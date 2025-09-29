@@ -1,0 +1,7 @@
+#@WebSocketChatBackend_HostAddress = http://localhost:5088
+@WebSocketChatBackend_HostAddress = http://localhost:8080
+
+GET {{WebSocketChatBackend_HostAddress}}/health/
+Accept: application/json
+
+###

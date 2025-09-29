@@ -1,0 +1,6 @@
+/.vs
+/WebSocketChat.Backend/obj
+/WebSocketChat.Backend/bin
+/WebSocketChat.sln.DotSettings.user
+/.idea/.idea.WebSocketChat/.idea/httpRequests
+/.idea/.idea.WebSocketChat/.idea/workspace.xml

@@ -1,0 +1,38 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSocketChat.Backend", "WebSocketChat.Backend\WebSocketChat.Backend.csproj", "{7E4FA99E-DF1A-47AB-A158-33C0BCCC8D11}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "deploy", "deploy", "{81EA9EFE-D049-41A8-9798-74054A0F15B5}"
+	ProjectSection(SolutionItems) = preProject
+		.dockerignore = .dockerignore
+		Dockerfile = Dockerfile
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dev", "dev", "{4AA540BF-9340-4513-BDB4-82C5D445C850}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitignore = .gitignore
+		global.json = global.json
+		README.md = README.md
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7E4FA99E-DF1A-47AB-A158-33C0BCCC8D11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E4FA99E-DF1A-47AB-A158-33C0BCCC8D11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E4FA99E-DF1A-47AB-A158-33C0BCCC8D11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E4FA99E-DF1A-47AB-A158-33C0BCCC8D11}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7B3985DB-4E8E-47BB-A610-2A4BC38717CD}
+	EndGlobalSection
+EndGlobal
